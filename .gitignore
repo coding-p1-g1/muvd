@@ -1,0 +1,2 @@
+# hides vscode setting file to not commit to GitHub
+.vscode/
