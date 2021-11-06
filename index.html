@@ -7,14 +7,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/reset.css" />
     <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/css/foundation.min.css" crossorigin="anonymous">
     <title>Muvd</title>
 </head>
 
 <body>
     <section class="mainpage">
-        <h1 class="name">Muvd</h1>
-        <p class="description">Movies suggested for your mood</p>
-        <button data-state="visible" class="mood">Select A Mood</button>
+        <h1 class="name">muvd</h1>
+        <h2 class="description">Movies suggested for your mood</h2>
+        <section class="boring">
+            <form>
+                <div class="grid-container">
+                    <p>You can be boring and search a movie..</p>
+                    <div class="grid-x grid-padding-x">
+                    <div class="medium-6 cell">
+                      <label>
+                        <input type="text" placeholder="Search by Title">
+                      </label>
+                    </div>
+                </div>
+                <a id="mood" data-state="visible" class="button primary" href="#">Enter</a>
+                </div>
+            </form>
+        </section>
+        <section>
+            <h3 class="or">Or</h1>
+            <h2>Choose your mood?</h2>
+            <a id="happy" data-state="visible" class="button primary" href="#">Happy</a>
+            <a id="sad" data-state="visible" class="button primary" href="#">Sad</a>
+            <a id="romance" data-state="visible" class="button primary" href="#">Romance</a>
+            <a id="action" data-state="visible" class="button primary" href="#">Action</a>
+
+        </section>
         <div class="images">
         </div>
     </section>
