@@ -7,10 +7,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/reset.css" />
     <link rel="stylesheet" href="./assets/css/style.css" />
-    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/css/foundation.min.css" crossorigin="anonymous">
+    <title>Muvd</title>
 </head>
 
 <body>
+    <section class="mainpage">
+        <h1 class="name">muvd</h1>
+        <h2 class="description">Movies suggested for your mood</h2>
+        <section class="boring">
+            <form>
+                <div class="grid-container">
+                    <p>You can be boring and search a movie..</p>
+                    <div class="grid-x grid-padding-x">
+                    <div class="medium-6 cell">
+                      <label>
+                        <input id="search-title" type="text" placeholder="Search by Title">
+                      </label>
+                    </div>
+                </div>
+                <button id="enter" data-state="visible" class="button primary" href="#">Enter</button>
+                </div>
+            </form>
+        </section>
+        <section>
+            <h3 class="or">Or</h1>
+            <h2>Choose your mood?</h2>
+            <button id="happy" data-state="visible" class="button primary" href="#">Happy</button>
+            <button id="sad" data-state="visible" class="button primary" href="#">Sad</button>
+            <button id="romance" data-state="visible" class="button primary" href="#">Romance</button>
+            <button id="action" data-state="visible" class="button primary" href="#">Action</button>
+
+        </section>
+    </section>
     
     <script src="./assets/js/script.js"></script>
 </body>
