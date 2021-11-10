@@ -47,14 +47,14 @@ function fetchMovie(event) {
             mainpage.append(movieTitleBtn)
             movieTitleBtn.classList="button primary"
             movieTitleBtn.setAttribute("data-id", movieID)
-
+            
             console.log(movieData.results[0].id)  
             var movieID = movieData.results[0].id 
             var movieDataTitle = movieData.results[0].original_title
             movieTitleBtn.addEventListener("click", function(event){
                 event.preventDefault();
                 fetchMovieDetails(movieID);
-                //fetchNYTReview(movieDataTitle);
+                fetchNYTReview(movieDataTitle);
             })
            })
 }
@@ -79,35 +79,37 @@ function fetchMovieDetails(movieID){
         movieOverview.textContent = movieData.overview
         movieRelease.textContent = movieData.release_date
         movieRunTime.textContent = movieData.runtime + " mins"
-        movieTagLine.textContent = '"' + movieData.tagline + '"gi'
+        movieTagLine.textContent = '"' + movieData.tagline + '"'
         mainpage.append(newMovieTitle)
         mainpage.append(movieOverview)
         mainpage.append(movieRelease)
         mainpage.append(movieRunTime)
         mainpage.append(movieTagLine)
         var newMovieDate = movieData.release_date
-        console.log(newMovieTitle)
-        //fetchNYTReview(newMovieTitle, newMovieDate)
+        console.log(newMovieDate)
+
+        var movieTitle = newMovieTitle.textContent
+        fetchNYTReview(movieTitle, newMovieDate)
+        console.log(movieTitle)
 
     })
 }
 
-// function fetchNYTReview(newMovieTitle, newMovieDate){
-//     var apiKeyNYT = "e5vmiDaoq5lQjo2shrZE0LW5iZ0o475e"
-//     var requestUrl = "https://api.nytimes.com/svc/movies/v2/reviews/search.json?publication-date=" + newMovieDate + ":" + newMovieDate + "&query=" + newMovieTitle + "&api-key=" + apiKeyNYT;
-//     console.log(newMovieDate)
+function fetchNYTReview(movieTitle, newMovieDate){
+    var apiKeyNYT = "e5vmiDaoq5lQjo2shrZE0LW5iZ0o475e"
+    var requestUrl = "https://api.nytimes.com/svc/movies/v2/reviews/search.json?publication-date=" + newMovieDate + ":" + newMovieDate + "&query=" + movieTitle + "&api-key=" + apiKeyNYT;
 
+    console.log(movieTitle)
+    console.log(requestUrl)
     
+    console.log(newMovieDate)
 
-//     fetch(requestUrl)
-//     .then(function (response) {
-//         return response.json();
-//     })
-//     .then(function (NYTData) {
-//         console.log(NYTData)
-           
-// })
-// }
+    fetch(requestUrl)
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (nytData) {
+        console.log(nytData)
 
-//https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=godfather&api-key=yourkey
-
+    })
+}
