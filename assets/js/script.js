@@ -41,11 +41,22 @@ function fetchMovie(event) {
             //clears the mainpage
             mainpage.innerHTML=""
             
+            //create and append some text to the button page
+            var choseMovie = document.createElement("h2")
+            document.body.append(choseMovie)
+            choseMovie.textContent = "Chose a movie."
+
+            //create button container, append, add class
+            var movieButtonContainer = document.createElement("div")
+            document.body.append(movieButtonContainer)
+            movieButtonContainer.classList.add("button-container")
             //create button with movie title names
             var movieTitleBtn= document.createElement("button")
             movieTitleBtn.textContent= movieData.results[0].original_title
-            mainpage.append(movieTitleBtn)
-            movieTitleBtn.classList="button primary"
+            
+            //append button to container
+            movieButtonContainer.append(movieTitleBtn)
+            movieTitleBtn.classList="button"
             movieTitleBtn.setAttribute("data-id", movieID)
             
             console.log(movieData.results[0].id)  
@@ -70,24 +81,55 @@ function fetchMovieDetails(movieID){
     .then(function (movieData) {
         console.log(movieData)    
         mainpage.innerHTML="" 
+        
+        
+        //create row container
+        var row = document.createElement("div")
+        
+
+        //create movie info container and append to row container
+        var movieInfoContainer = document.createElement("div")
+        row.append(movieInfoContainer)
+        
+        //create info elements and append
         var newMovieTitle = document.createElement("h1")
-        var movieOverview = document.createElement("h3")
-        var movieRelease = document.createElement("h3")
-        var movieRunTime = document.createElement("h3")
-        var movieTagLine = document.createElement("h3")
+        var movieOverview = document.createElement("p")
+        var movieRelease = document.createElement("p")
+        var movieRunTime = document.createElement("p")
+        var movieTagLine = document.createElement("p")
+        document.body.append(newMovieTitle)
+        document.body.append(movieTagLine)
+        document.body.append(row)
+        movieInfoContainer.append(movieOverview)
+        movieInfoContainer.append(movieRelease)
+        movieInfoContainer.append(movieRunTime)
+        
+        
+        //setting text content for movie info
         newMovieTitle.textContent = movieData.original_title
-        movieOverview.textContent = movieData.overview
-        movieRelease.textContent = movieData.release_date
-        movieRunTime.textContent = movieData.runtime + " mins"
+        movieOverview.textContent = "Overview: " + movieData.overview
+        movieRelease.textContent = "Release Date: " + movieData.release_date
+        movieRunTime.textContent = "Run Time: " + movieData.runtime + " mins"
         movieTagLine.textContent = '"' + movieData.tagline + '"'
-        mainpage.append(newMovieTitle)
-        mainpage.append(movieOverview)
-        mainpage.append(movieRelease)
-        mainpage.append(movieRunTime)
-        mainpage.append(movieTagLine)
+        
+        //setting classes for containers
+        row.classList.add("row")
+        movieInfoContainer.classList.add("movie-info-container", "columns", "small-6", "large-4")
+        
+
+        //setting classes for info elements 
+        newMovieTitle.classList.add("new-title")
+        movieTagLine.classList.add("tag-line")
+
+        
+        
+        
+        
+        
+        
         var newMovieDate = movieData.release_date
         console.log(newMovieDate)
-
+        
         var movieTitle = newMovieTitle.textContent
         fetchNYTReview(movieTitle, newMovieDate)
         console.log(movieTitle)
