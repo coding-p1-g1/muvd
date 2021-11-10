@@ -54,7 +54,7 @@ function fetchMovie(event) {
             movieTitleBtn.addEventListener("click", function(event){
                 event.preventDefault();
                 fetchMovieDetails(movieID);
-                fetchNYTReview(movieDataTitle);
+                //fetchNYTReview(movieDataTitle);
             })
            })
 }
@@ -71,25 +71,43 @@ function fetchMovieDetails(movieID){
         console.log(movieData)    
         mainpage.innerHTML="" 
         var newMovieTitle = document.createElement("h1")
+        var movieOverview = document.createElement("h3")
+        var movieRelease = document.createElement("h3")
+        var movieRunTime = document.createElement("h3")
+        var movieTagLine = document.createElement("h3")
         newMovieTitle.textContent = movieData.original_title
+        movieOverview.textContent = movieData.overview
+        movieRelease.textContent = movieData.release_date
+        movieRunTime.textContent = movieData.runtime + " mins"
+        movieTagLine.textContent = '"' + movieData.tagline + '"gi'
         mainpage.append(newMovieTitle)
+        mainpage.append(movieOverview)
+        mainpage.append(movieRelease)
+        mainpage.append(movieRunTime)
+        mainpage.append(movieTagLine)
+        var newMovieDate = movieData.release_date
+        console.log(newMovieTitle)
+        //fetchNYTReview(newMovieTitle, newMovieDate)
 
     })
 }
 
-function fetchNYTReview(movieDataTitle){
-    var apiKeyNYT = "e5vmiDaoq5lQjo2shrZE0LW5iZ0o475e"
-    var requestUrl = "https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=" + movieDataTitle + "&api-key=" + apiKeyNYT;
+// function fetchNYTReview(newMovieTitle, newMovieDate){
+//     var apiKeyNYT = "e5vmiDaoq5lQjo2shrZE0LW5iZ0o475e"
+//     var requestUrl = "https://api.nytimes.com/svc/movies/v2/reviews/search.json?publication-date=" + newMovieDate + ":" + newMovieDate + "&query=" + newMovieTitle + "&api-key=" + apiKeyNYT;
+//     console.log(newMovieDate)
+
     
 
-    fetch(requestUrl)
-    .then(function (response) {
-        return response.json();
-    })
-    .then(function (NYTData) {
-        console.log(NYTData)
+//     fetch(requestUrl)
+//     .then(function (response) {
+//         return response.json();
+//     })
+//     .then(function (NYTData) {
+//         console.log(NYTData)
            
-})
-}
+// })
+// }
 
+//https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=godfather&api-key=yourkey
 
