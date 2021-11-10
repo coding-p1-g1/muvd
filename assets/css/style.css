@@ -37,3 +37,33 @@ h2 {
 /* .button {
     
 } */
+
+
+/* add a div container for all of these called movieInfoContainer
+add classes: movie-info-container, grid-x, cell-large-6, grid-margin-x */
+
+
+.new-movie-title {
+    text-align: center;
+    font-size: 50px;
+}
+
+.movie-overview {
+/* change to p  */
+}
+
+.movie-release {
+    /* change to p  */
+}
+
+.movie-run-time {
+    /* change to p */
+}
+
+.movie-tag-line {
+    font-size: 15px;
+}
+
+.movie-info-container {
+
+}
