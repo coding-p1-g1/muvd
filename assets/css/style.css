@@ -1,0 +1,39 @@
+body {
+    background-color:#FCF0C8;
+}
+
+h1,h2,h3,h4,h5,h6 { 
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    
+}
+
+
+h1 { 
+    font-size: 50px;
+    text-align: center;
+}
+
+
+
+
+h2 {
+    font-size: 30px;
+    text-align: center;
+}
+
+.grid-container {
+    border: 1px solid black;
+    text-align: center;
+    padding-bottom: 1px;
+}
+
+
+.or {
+    border: 1px solid black;
+    text-align: center;
+}
+
+
+/* .button {
+    
+} */
