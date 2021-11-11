@@ -55,7 +55,7 @@ function fetchMovie(event) {
             mainpage.append(movieButtonContainer)
             movieButtonContainer.classList.add("button-container")
 
-            for (var i = 10; i < dataResults.length; i++) {
+            for (var i = 0; i < dataResults.length; i++) {
                 //create button with movie title names
                 var movieTitleBtn = document.createElement("button")
                 movieTitleBtn.textContent = movieData.results[i].original_title
@@ -169,7 +169,7 @@ function fetchNYTReview(movieTitle) {
                     var nytDisplayTitle = nytData.results[i].display_title
                     console.log(nytDisplayTitle, movieTitle)
                     if (nytDisplayTitle === movieTitle){
-                        
+
                         //Add NYT Review section
                         var nytReview = document.createElement("h2")
                         nytReview.textContent = "New York Times Review"
@@ -186,7 +186,26 @@ function fetchNYTReview(movieTitle) {
                         var summaryShort = document.createElement("h4")
                         summaryShort.textContent = nytData.results[i].summary_short
                         mainpage.append(summaryShort)
-                
+
+                        var criticPick = document.createElement("h4")
+                        var criticPickData = nytData.results[i].critics_pick
+                        mainpage.append(criticPick)
+
+                        if (criticPickData === 1){
+                            criticPick.textContent = "This is a critic pick 👍"
+                        } else{
+                            criticPick.textContent = "This is not a critic pick 👎"
+                        }
+
+                        //link for NYT review
+                        var link = document.createElement("a")
+                        var linkUrl = nytData.results[i].link.url
+                        link.setAttribute("href", linkUrl)
+                        link.setAttribute("target", "_blank")
+                        link.textContent = linkUrl
+                        mainpage.append(link)
+                        console.log(linkUrl)
+                        
                     }
                 }
             }
