@@ -77,7 +77,16 @@ function fetchMovie(event) {
         })
 }
 
-enterBtn.addEventListener("click", fetchMovie);
+enterBtn.addEventListener("click", function(event){
+    event.preventDefault();
+    var keyword = titleInputEl.value.trim();
+    console.log(keyword)
+    if (keyword) {
+        fetchMovie()
+    } else {
+        titleInputEl.setAttribute("placeholder", "Please enter a movie")
+    }
+});
 
 function fetchMovieDetails(movieID) {
     var requestUrl = "https://api.themoviedb.org/3/movie/" + movieID + "?api_key=" + apiKey;
