@@ -28,7 +28,8 @@ var formSubmitHandler = function (event) {
 function fetchMovie(event) {
     event.preventDefault();
     var keyword = titleInputEl.value.trim();
-    var requestUrl = "https://api.themoviedb.org/3/search/movie?api_key=" + apiKey + "&language=en-US&query=" + keyword + "&page=1&include_adult=false"
+    var movie = keyword.replace(/\s+/g, '-');
+    var requestUrl = "https://api.themoviedb.org/3/search/movie?api_key=" + apiKey + "&language=en-US&query=" + movie + "&page=1&include_adult=false"
 
     fetch(requestUrl)
         .then(function (response) {
@@ -48,11 +49,13 @@ function fetchMovie(event) {
 
             //for loop to append 5 first movies
             var dataResults = movieData.results
-            for (var i = 10; i < dataResults.length; i++) {
-                var movieButtonContainer = document.createElement("div")
-                mainpage.append(movieButtonContainer)
-                movieButtonContainer.classList.add("button-container")
 
+            //create button containter
+            var movieButtonContainer = document.createElement("div")
+            mainpage.append(movieButtonContainer)
+            movieButtonContainer.classList.add("button-container")
+
+            for (var i = 10; i < dataResults.length; i++) {
                 //create button with movie title names
                 var movieTitleBtn = document.createElement("button")
                 movieTitleBtn.textContent = movieData.results[i].original_title
@@ -131,31 +134,29 @@ function fetchMovieDetails(movieID) {
 
 
 
-            var newMovieDate = movieData.release_date
-            console.log(newMovieDate)
 
             var movieTitle = newMovieTitle.textContent
-            fetchNYTReview(movieTitle, newMovieDate)
+            fetchNYTReview(movieTitle)
             console.log(movieTitle)
 
         })
 }
 
-function fetchNYTReview(movieTitle, newMovieDate) {
+function fetchNYTReview(movieTitle) {
     var apiKeyNYT = "e5vmiDaoq5lQjo2shrZE0LW5iZ0o475e"
-    var requestUrl = "https://api.nytimes.com/svc/movies/v2/reviews/search.json?publication-date=" + newMovieDate + ":" + newMovieDate + "&query=" + movieTitle + "&api-key=" + apiKeyNYT;
+    var title = movieTitle.replace(/\s+/g, '_');
+    console.log(title)
+    var nytRequestUrl = "https://api.nytimes.com/svc/movies/v2/reviews/search.json?&query=" + title + "&api-key=" + apiKeyNYT
 
     console.log(movieTitle)
-    console.log(requestUrl)
+    console.log(nytRequestUrl)
 
-    console.log(newMovieDate)
-
-    fetch(requestUrl)
+    fetch(nytRequestUrl)
         .then(function (response) {
             return response.json();
         })
         .then(function (nytData) {
             console.log(nytData)
-
+            
         })
 }
