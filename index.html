@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./assets/css/reset.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/css/foundation.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/dist/css/foundation.min.css"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/css/style.css" />
     <title>Muvd</title>
 </head>
@@ -19,29 +20,30 @@
             <form>
                 <div class="grid-container">
                     <p>You can be boring and search a movie..</p>
-                    <div class="grid-x grid-padding-x">
-                    <div class="medium-6 cell">
-                      <label>
-                        <input id="search-title" type="text" placeholder="Search by Title">
-                      </label>
+                    <div>
+                        <div class="medium-12 cell">
+                            <label>
+                                <input id="search-title" type="text" placeholder="Search by Title">
+                            </label>
+                        </div>
                     </div>
-                </div>
-                <button id="enter" data-state="visible" class="button" href="#">Enter</button>
+                    <button id="enter" data-state="visible" class="button" href="#">Enter</button>
                 </div>
             </form>
         </section>
-        <h3 id = "or" >Or...</h3>
-        <section class="mood">
-            <h2>Choose your mood?</h2>
-            <button id="happy" data-state="visible" class="button" href="#">Happy</button>
-            <button id="sad" data-state="visible" class="button" href="#">Sad</button>
-            <button id="romance" data-state="visible" class="button" href="#">Romance</button>
-            <button id="action" data-state="visible" class="button" href="#">Action</button>
-
+        <h3 id="or">Or...</h3>
+        <section>
+            <div class="grid-container">
+            <div class="mood">
+                <h2>Choose your mood?</h2>
+                <button id="happy" data-state="visible" class="button" href="#">Happy</button>
+                <button id="sad" data-state="visible" class="button" href="#">Sad</button>
+                <button id="romance" data-state="visible" class="button" href="#">Romance</button>
+                <button id="action" data-state="visible" class="button" href="#">Action</button>
+            </div>
+            </div>
         </section>
     </section>
-    
+
     <script src="./assets/js/script.js"></script>
 </body>
-
-</html>
