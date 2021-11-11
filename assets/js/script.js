@@ -93,7 +93,6 @@ function fetchMovieDetails(movieID) {
             //create row container
             var row = document.createElement("div")
 
-
             //create movie info container and append to row container
             var movieInfoContainer = document.createElement("div")
             row.append(movieInfoContainer)
@@ -104,9 +103,9 @@ function fetchMovieDetails(movieID) {
             var movieRelease = document.createElement("p")
             var movieRunTime = document.createElement("p")
             var movieTagLine = document.createElement("p")
-            document.body.append(newMovieTitle)
-            document.body.append(movieTagLine)
-            document.body.append(row)
+            mainpage.append(newMovieTitle)
+            mainpage.append(movieTagLine)
+            mainpage.append(row)
             movieInfoContainer.append(movieOverview)
             movieInfoContainer.append(movieRelease)
             movieInfoContainer.append(movieRunTime)
@@ -157,6 +156,40 @@ function fetchNYTReview(movieTitle) {
         })
         .then(function (nytData) {
             console.log(nytData)
+            var nytResults = nytData.results
+            var nytReviewDiv = document.createElement("div")
+            mainpage.append(nytReviewDiv)
+
+            if (nytResults === null){
+                var noReview = document.createElement("h2")
+                noReview.textContent = "Sorry, no NYT Review for " + movieTitle
+                nytReviewDiv.append(noReview)
+            } else {
+                for ( var i = 0; i < nytResults.length; i++){
+                    var nytDisplayTitle = nytData.results[i].display_title
+                    console.log(nytDisplayTitle, movieTitle)
+                    if (nytDisplayTitle === movieTitle){
+                        
+                        //Add NYT Review section
+                        var nytReview = document.createElement("h2")
+                        nytReview.textContent = "New York Times Review"
+                        mainpage.append(nytReview)
+                        
+                        var headline = document.createElement("h4")
+                        headline.textContent = nytData.results[i].headline
+                        mainpage.append(headline)
+
+                        var mpaaRating = document.createElement("h4")
+                        mpaaRating.textContent = nytData.results[i].mpaa_rating
+                        mainpage.append(mpaaRating)
+
+                        var summaryShort = document.createElement("h4")
+                        summaryShort.textContent = nytData.results[i].summary_short
+                        mainpage.append(summaryShort)
+                
+                    }
+                }
+            }
             
         })
 }
