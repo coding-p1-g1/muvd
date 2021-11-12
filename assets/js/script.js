@@ -2,35 +2,22 @@
 var titleInputEl = document.querySelector('#search-title');
 var enterBtn = document.querySelector('#enter');
 var happyBtn = document.querySelector('#happy');
-var sadBtn = document.querySelector('#sad');
-var romanceBtn = document.querySelector('#romance');
-var actionBtn = document.querySelector('#action');
+var fantasyBtn = document.querySelector('#fantasy');
+var adventureBtn = document.querySelector('#adventure');
+var horrorBtn = document.querySelector('#horror');
 var mainpage = document.querySelector('.mainpage')
 var apiKey = "50d14f268f52866ef75ec1d9d03faf7a";
-
-// movie input
-var formSubmitHandler = function (event) {
-    event.preventDefault();
-
-    var movieInput = titleInputEl.value.trim();
-
-    if (movieInput) {
-        fetchMovie(movieInput);
-
-        titleInputEl.value = '';
-    } else {
-        alert('Movie not found');
-    }
-};
+var moodButtonsDiv = document.querySelector('.mood')
+var genreBtn = document.querySelector('.genre-button')
 
 // fetchMovie will get data from TMDb Api with what the user inputed
 
-function fetchMovie(event) {
-    event.preventDefault();
+function fetchMovie() {
     var keyword = titleInputEl.value.trim();
     var movie = keyword.replace(/\s+/g, '-');
-    var requestUrl = "https://api.themoviedb.org/3/search/movie?api_key=" + apiKey + "&language=en-US&query=" + movie + "&page=1&include_adult=false"
-
+    var pageNum = 1
+    var requestUrl = "https://api.themoviedb.org/3/search/movie?api_key=" + apiKey + "&language=en-US&query=" + movie + "&page="+ pageNum + "&include_adult=false"
+    
     fetch(requestUrl)
         .then(function (response) {
             return response.json();
@@ -47,7 +34,7 @@ function fetchMovie(event) {
             chooseMovie.textContent = "Choose a movie:"
             mainpage.append(chooseMovie)
 
-            //for loop to append 5 first movies
+            //for loop to append movies
             var dataResults = movieData.results
 
             //create button containter
@@ -88,6 +75,95 @@ enterBtn.addEventListener("click", function(event){
     }
 });
 
+happyBtn.addEventListener("click", function(event){
+    event.preventDefault();
+    var genreID = happyBtn.getAttribute("data-genre")
+    genreSearch(genreID);
+}
+);
+
+fantasyBtn.addEventListener("click", function(event){
+    event.preventDefault();
+    var genreID = fantasyBtn.getAttribute("data-genre")
+    genreSearch(genreID);
+}
+);
+
+adventureBtn.addEventListener("click", function(event){
+    event.preventDefault();
+    var genreID = adventureBtn.getAttribute("data-genre")
+    genreSearch(genreID);
+}
+);
+
+horrorBtn.addEventListener("click", function(event){
+    event.preventDefault();
+    var genreID = horrorBtn.getAttribute("data-genre")
+    genreSearch(genreID);
+}
+);
+
+//movie suggestions for mood buttons
+
+function genreSearch(genreID) {
+    var requestUrlGenre = "https://api.themoviedb.org/3/discover/movie?api_key=" + apiKey + "&language=en-US&sort_by=popularity.desc&with_genres=" + genreID
+
+
+
+    // //var movieID = movieTitleBtn.getAttribute("data-id")
+    // function buttonByID(movieID) {
+    //     movieTitleBtn.addEventListener("click", function () {
+    //         fetchMovieDetails(movieID);
+    //     })
+    // }
+    // buttonByID(movieID);
+
+    console.log(genreID)
+    console.log(requestUrlGenre)
+
+    fetch(requestUrlGenre)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (genreMovies) {
+            console.log(genreMovies)
+            mainpage.innerHTML = ""
+
+            var chooseMovie = document.createElement("h2")
+            chooseMovie.textContent = "Choose a movie:"
+            mainpage.append(chooseMovie)
+
+            var movieButtonContainer = document.createElement("div")
+            mainpage.append(movieButtonContainer)
+            movieButtonContainer.classList.add("button-container")
+
+            //for loop to append 5 first movies
+            
+            var genreMoviesData = genreMovies.results
+
+            for (var i = 0; i < genreMoviesData.length; i++) {
+                //create button with movie title names
+                var movieTitleBtn = document.createElement("button")
+                movieTitleBtn.textContent = genreMovies.results[i].title
+                movieTitleBtn.classList = "button primary"
+                var btnID = genreMovies.results[i].id
+                movieTitleBtn.setAttribute("data-id", btnID)
+                movieButtonContainer.append(movieTitleBtn)
+
+                // console.log(btnID)
+
+                var movieID = movieTitleBtn.getAttribute("data-id")
+                function buttonByID(movieID) {
+                    movieTitleBtn.addEventListener("click", function () {
+                        fetchMovieDetails(movieID);
+                    })
+                }
+                buttonByID(movieID);
+            }
+        })
+}
+
+//movie details
 function fetchMovieDetails(movieID) {
     var requestUrl = "https://api.themoviedb.org/3/movie/" + movieID + "?api_key=" + apiKey;
     fetch(requestUrl)
@@ -119,13 +195,19 @@ function fetchMovieDetails(movieID) {
             movieInfoContainer.append(movieRelease)
             movieInfoContainer.append(movieRunTime)
 
+            //renders movie poster onto page
+            var movieImage = document.createElement("img")
+            var posterPath = movieData.poster_path
+            console.log (posterPath)
+            movieImage.setAttribute("src", "https://image.tmdb.org/t/p/w154/" + posterPath)
+            movieInfoContainer.append(movieImage)
 
             //setting text content for movie info
-            newMovieTitle.textContent = movieData.original_title
+            newMovieTitle.textContent = movieData.title
             movieOverview.textContent = "Overview: " + movieData.overview
             movieRelease.textContent = "Release Date: " + movieData.release_date
             movieRunTime.textContent = "Run Time: " + movieData.runtime + " mins"
-            movieTagLine.textContent = '"' + movieData.tagline + '"'
+            movieTagLine.textContent = movieData.tagline
 
             //setting classes for containers
             row.classList.add("row")
@@ -135,13 +217,6 @@ function fetchMovieDetails(movieID) {
             //setting classes for info elements 
             newMovieTitle.classList.add("new-title")
             movieTagLine.classList.add("tag-line")
-
-
-
-
-
-
-
 
             var movieTitle = newMovieTitle.textContent
             fetchNYTReview(movieTitle)
