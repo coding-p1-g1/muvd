@@ -31,6 +31,7 @@ function fetchMovie() {
 
             //create and append some text to the button page
             var chooseMovie = document.createElement("h2")
+            chooseMovie.classList.add("choose-a-movie")
             chooseMovie.textContent = "Choose a movie:"
             mainpage.append(chooseMovie)
 
@@ -46,7 +47,7 @@ function fetchMovie() {
                 //create button with movie title names
                 var movieTitleBtn = document.createElement("button")
                 movieTitleBtn.textContent = movieData.results[i].original_title
-                movieTitleBtn.classList = "button primary"
+                movieTitleBtn.classList.add("button", "movie-title-button")
                 var btnID = movieData.results[i].id
                 movieTitleBtn.setAttribute("data-id", btnID)
                 movieButtonContainer.append(movieTitleBtn)
@@ -145,7 +146,7 @@ function genreSearch(genreID) {
                 //create button with movie title names
                 var movieTitleBtn = document.createElement("button")
                 movieTitleBtn.textContent = genreMovies.results[i].title
-                movieTitleBtn.classList = "button primary"
+                movieTitleBtn.classList.add("button", "movie-title-button")
                 var btnID = genreMovies.results[i].id
                 movieTitleBtn.setAttribute("data-id", btnID)
                 movieButtonContainer.append(movieTitleBtn)
@@ -173,50 +174,59 @@ function fetchMovieDetails(movieID) {
         .then(function (movieData) {
             console.log(movieData)
             mainpage.innerHTML = ""
+            
+            // create title and tagline, append to main page
+            var newMovieTitle = document.createElement("h1")
+            mainpage.append(newMovieTitle)
+            newMovieTitle.textContent = movieData.title
+            newMovieTitle.classList.add("new-title")
 
+            var movieTagLine = document.createElement("p")
+            mainpage.append(movieTagLine)
+            movieTagLine.textContent = '"' + movieData.tagline + '"'
+            movieTagLine.classList.add("tag-line")
 
             //create row container
             var row = document.createElement("div")
-
-            //create movie info container and append to row container
-            var movieInfoContainer = document.createElement("div")
-            row.append(movieInfoContainer)
-
-            //create info elements and append
-            var newMovieTitle = document.createElement("h1")
-            var movieOverview = document.createElement("p")
-            var movieRelease = document.createElement("p")
-            var movieRunTime = document.createElement("p")
-            var movieTagLine = document.createElement("p")
-            mainpage.append(newMovieTitle)
-            mainpage.append(movieTagLine)
             mainpage.append(row)
-            movieInfoContainer.append(movieOverview)
-            movieInfoContainer.append(movieRelease)
-            movieInfoContainer.append(movieRunTime)
+            row.classList.add("row")
 
-            //renders movie poster onto page
+            //create poster container and append to row container 
+            var posterContainer = document.createElement("div")
+            row.append(posterContainer)
+            posterContainer.classList.add("poster-container")
+
+            //create poster el and append to poster container
             var movieImage = document.createElement("img")
             var posterPath = movieData.poster_path
             console.log (posterPath)
             movieImage.setAttribute("src", "https://image.tmdb.org/t/p/w154/" + posterPath)
-            movieInfoContainer.append(movieImage)
+            posterContainer.append(movieImage)
 
-            //setting text content for movie info
-            newMovieTitle.textContent = movieData.title
+            //create movie info container and append to row container
+            var movieInfoContainer = document.createElement("div")
+            row.append(movieInfoContainer)
+            movieInfoContainer.classList.add("movie-info-container", "columns", "small-6", "large-4")
+            
+    
+            //create info elements and append to info container
+            var movieOverview = document.createElement("p")
+            var movieInfo = document.createElement("h2")
+            var movieRelease = document.createElement("p")
+            var movieRunTime = document.createElement("p")
+            
+            movieInfoContainer.append(movieInfo)    
+            movieInfoContainer.append(movieOverview)
+            movieInfoContainer.append(movieRelease)
+            movieInfoContainer.append(movieRunTime)
+
+            
             movieOverview.textContent = "Overview: " + movieData.overview
+            movieInfo.textContent = "Movie Info"
             movieRelease.textContent = "Release Date: " + movieData.release_date
             movieRunTime.textContent = "Run Time: " + movieData.runtime + " mins"
-            movieTagLine.textContent = movieData.tagline
-
-            //setting classes for containers
-            row.classList.add("row")
-            movieInfoContainer.classList.add("movie-info-container", "columns", "small-6", "large-4")
-
-
-            //setting classes for info elements 
-            newMovieTitle.classList.add("new-title")
-            movieTagLine.classList.add("tag-line")
+            
+           
 
             var movieTitle = newMovieTitle.textContent
             fetchNYTReview(movieTitle)
@@ -241,12 +251,21 @@ function fetchNYTReview(movieTitle) {
         .then(function (nytData) {
             console.log(nytData)
             var nytResults = nytData.results
+            
+            //create row container
+            var row = document.createElement("div")
+            mainpage.append(row)
+            row.classList.add("row")
+
+            //create review container div and append to row container
             var nytReviewDiv = document.createElement("div")
-            mainpage.append(nytReviewDiv)
+            row.append(nytReviewDiv)
+            nytReviewDiv.classList.add("nyt-review-div", "columns", "small-6", "large-4")
 
             if (nytResults === null){
                 var noReview = document.createElement("h2")
                 noReview.textContent = "Sorry, no NYT Review for " + movieTitle
+                row.append(nytReviewDiv)
                 nytReviewDiv.append(noReview)
             } else {
                 for ( var i = 0; i < nytResults.length; i++){
@@ -254,26 +273,26 @@ function fetchNYTReview(movieTitle) {
                     console.log(nytDisplayTitle, movieTitle)
                     if (nytDisplayTitle === movieTitle){
 
-                        //Add NYT Review section
+                        //create review elements and append to review container
                         var nytReview = document.createElement("h2")
                         nytReview.textContent = "New York Times Review"
-                        mainpage.append(nytReview)
+                        nytReviewDiv.append(nytReview)
                         
                         var headline = document.createElement("h4")
                         headline.textContent = nytData.results[i].headline
-                        mainpage.append(headline)
+                        nytReviewDiv.append(headline)
 
                         var mpaaRating = document.createElement("h4")
                         mpaaRating.textContent = nytData.results[i].mpaa_rating
-                        mainpage.append(mpaaRating)
+                        nytReviewDiv.append(mpaaRating)
 
                         var summaryShort = document.createElement("h4")
                         summaryShort.textContent = nytData.results[i].summary_short
-                        mainpage.append(summaryShort)
+                        nytReviewDiv.append(summaryShort)
 
                         var criticPick = document.createElement("h4")
                         var criticPickData = nytData.results[i].critics_pick
-                        mainpage.append(criticPick)
+                        nytReviewDiv.append(criticPick)
 
                         if (criticPickData === 1){
                             criticPick.textContent = "This is a critic pick 👍"
@@ -286,8 +305,9 @@ function fetchNYTReview(movieTitle) {
                         var linkUrl = nytData.results[i].link.url
                         link.setAttribute("href", linkUrl)
                         link.setAttribute("target", "_blank")
-                        link.textContent = linkUrl
-                        mainpage.append(link)
+                        link.textContent = "Read the review: " + linkUrl
+                        nytReviewDiv.append(link)
+                        link.classList.add("link")
                         console.log(linkUrl)
                         
                     }
