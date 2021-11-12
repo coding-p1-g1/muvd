@@ -74,13 +74,26 @@ h2 {
 
 /* appended elements  */
 
-
-
-.button-container {
-    border: 5px solid black
+.choose-a-movie {
+    color:#911F27;
 }
 
 
+.button-container {
+    margin: auto;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    border: 5px solid black;
+    background-color: #FACE7F;
+}
+
+
+.movie-title-button {
+    margin-bottom: 0%;
+    align-self: center;
+    width: 60%
+}
 
 .new-title {
     text-align: center;
@@ -89,12 +102,6 @@ h2 {
 }
 
 
-.movie-info-container {
-    border: 10px solid black;
-    font-size: 25px;
-    
-}
-
 .tag-line {
     font-size:15px;
     text-align: center;
@@ -102,4 +109,21 @@ h2 {
 }
 
 
+.poster-container {
+    display: flex;
+    justify-content: center;
+}
 
+
+.movie-info-container {
+    border: 5px solid black;
+    font-size: 25px;
+    margin-top: 10px;
+    
+}
+
+.nyt-review-div {
+    border: 5px solid black;
+    font-size: 25px;
+    margin-top: 10px;
+}
