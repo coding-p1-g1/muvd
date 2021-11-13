@@ -77,6 +77,15 @@ h2 {
 
 /* appended elements  */
 
+/* previous search buttons */
+.saved-movie-button {
+    background-color: #FCF0C8;
+    color: black;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 1px black solid;
+}
+
 .choose-a-movie {
     color:#911F27;
 }
