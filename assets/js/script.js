@@ -149,15 +149,6 @@ function genreSearch(genreID) {
     var requestUrlGenre = "https://api.themoviedb.org/3/discover/movie?api_key=" + apiKey + "&language=en-US&sort_by=popularity.desc&with_genres=" + genreID
 
 
-
-    // //var movieID = movieTitleBtn.getAttribute("data-id")
-    // function buttonByID(movieID) {
-    //     movieTitleBtn.addEventListener("click", function () {
-    //         fetchMovieDetails(movieID);
-    //     })
-    // }
-    // buttonByID(movieID);
-
     console.log(genreID)
     console.log(requestUrlGenre)
 
@@ -222,7 +213,7 @@ function fetchMovieDetails(movieID) {
 
             var movieTagLine = document.createElement("p")
             mainpage.append(movieTagLine)
-            movieTagLine.textContent = '"' + movieData.tagline + '"'
+            movieTagLine.textContent = movieData.tagline
             movieTagLine.classList.add("tag-line")
 
             //create row container
@@ -306,6 +297,11 @@ function fetchNYTReview(movieTitle) {
                 noReview.textContent = "Sorry, no NYT Review for " + movieTitle
                 row.append(nytReviewDiv)
                 nytReviewDiv.append(noReview)
+            } else if (nytDisplayTitle !== movieTitle){
+                var noReview = document.createElement("h2")
+                noReview.textContent = "Sorry, no NYT Review for " + movieTitle
+                row.append(nytReviewDiv)
+                nytReviewDiv.append(noReview)
             } else {
                 for ( var i = 0; i < nytResults.length; i++){
                     var nytDisplayTitle = nytData.results[i].display_title
@@ -348,7 +344,7 @@ function fetchNYTReview(movieTitle) {
                         nytReviewDiv.append(link)
                         link.classList.add("link")
                         console.log(linkUrl)
-                        
+                        return;
                     }
                 }
             }
