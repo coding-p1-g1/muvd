@@ -9,16 +9,20 @@ var mainpage = document.querySelector('.mainpage')
 var apiKey = "50d14f268f52866ef75ec1d9d03faf7a";
 var moodButtonsDiv = document.querySelector('.mood')
 var genreBtn = document.querySelector('.genre-button')
+var searchListContainer = document.querySelector("#search-list-container")
+var gridContainer = document.querySelector(".grid-container")
+
+// localstorage
+var pastSearches = localStorage.getItem("pastSearches") || "[]";
+var searchArray = JSON.parse(pastSearches);
+
 
 // fetchMovie will get data from TMDb Api with what the user inputed
 var pageNum = 1
 
-function fetchMovie() {
-    var keyword = titleInputEl.value.trim();
-    var movie = keyword.replace(/\s+/g, '-');
-    
-    var requestUrl = "https://api.themoviedb.org/3/search/movie?api_key=" + apiKey + "&language=en-US&query=" + movie + "&page="+ pageNum + "&include_adult=false"
-    
+function fetchMovie(movieVal) {
+    var requestUrl = "https://api.themoviedb.org/3/search/movie?api_key=" + apiKey + "&language=en-US&query=" + movieVal + "&page="+ pageNum + "&include_adult=false"
+
     fetch(requestUrl)
         .then(function (response) {
             return response.json();
@@ -62,81 +66,130 @@ function fetchMovie() {
                     })
                 }
                 buttonByID(movieID);
-            } 
-            if (pageNum > 1){
+            }
+            if (pageNum > 1) {
                 prevPage();
             }
-        
+
             nextPage();
         })
 }
 
-function nextPage (){
-var nextBtn = document.createElement("button")
-nextBtn.textContent = "Next Page"
-nextBtn.classList = "button primary"
-nextBtn.setAttribute("class", "button")
-nextBtn.style.background="#FACE7F"
-nextBtn.style.color="black"
-nextBtn.style.float="right"
-mainpage.append(nextBtn)
-nextBtn.addEventListener("click", function(){
-pageNum = pageNum + 1 
-console.log(pageNum)
-fetchMovie(pageNum)
-})
+function nextPage() {
+    var nextBtn = document.createElement("button")
+    nextBtn.textContent = "Next Page"
+    nextBtn.classList = "button primary"
+    nextBtn.setAttribute("class", "button")
+    nextBtn.style.background = "#FACE7F"
+    nextBtn.style.color = "black"
+    nextBtn.style.float = "right"
+    mainpage.append(nextBtn)
+    nextBtn.addEventListener("click", function () {
+        pageNum = pageNum + 1
+        console.log(pageNum)
+        fetchMovie(pageNum)
+    })
 
 }
 
-function prevPage (){
-var prevBtn = document.createElement("button")
-prevBtn.textContent = "Previous Page"
-prevBtn.classList = "button primary"
-prevBtn.setAttribute("class", "button")
-prevBtn.style.background="#FACE7F"
-prevBtn.style.color="black"
-mainpage.append(prevBtn)
-prevBtn.addEventListener("click", function(){
-pageNum = pageNum - 1
-console.log(pageNum)
-fetchMovie(pageNum)
-})
+function prevPage() {
+    var prevBtn = document.createElement("button")
+    prevBtn.textContent = "Previous Page"
+    prevBtn.classList = "button primary"
+    prevBtn.setAttribute("class", "button")
+    prevBtn.style.background = "#FACE7F"
+    prevBtn.style.color = "black"
+    mainpage.append(prevBtn)
+    prevBtn.addEventListener("click", function () {
+        pageNum = pageNum - 1
+        console.log(pageNum)
+        fetchMovie(pageNum)
+    })
 }
 
+// clear localstorage
+var clearButton = document.createElement("button")
+clearButton.textContent = "Clear"
+gridContainer.append(clearButton)
+clearButton.classList.add("button")
+clearButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    searchListContainer.innerHTML = ""
+    localStorage.clear()
+})
 
-enterBtn.addEventListener("click", function(event){
+enterBtn.addEventListener("click", function (event) {
     event.preventDefault();
     var keyword = titleInputEl.value.trim();
-    console.log(keyword)
+    var movie = keyword.replace(/\s+/g, '-');
+
+    searchArray.push(movie)
+    localStorage.setItem("pastSearches", JSON.stringify(searchArray))
+
     if (keyword) {
-        fetchMovie()
+        var addedMovie = document.createElement("button");
+        addedMovie.classList.add("button", "saved-movie-button");
+        addedMovie.setAttribute("value", movie);
+
+        var movieVal = addedMovie.getAttribute("value")
+        addedMovie.textContent = keyword;
+        searchListContainer.prepend(addedMovie);
+        console.log(movie)
+
+        fetchMovie(movieVal)
+        searchList()
+        titleInputEl.innerHTML = ""
     } else {
         titleInputEl.setAttribute("placeholder", "Please enter a movie")
     }
 });
 
-happyBtn.addEventListener("click", function(event){
+function searchList() {
+    searchListContainer.innerHTML = ""
+    for (var i = 0; i < searchArray.length; i++) {
+        var addedMovie = document.createElement("button");
+        addedMovie.classList.add("button", "saved-movie-button");
+        addedMovie.setAttribute("value", searchArray[i]);
+
+        var movieVal = addedMovie.getAttribute("value")
+        addedMovie.textContent = movieVal;
+        searchListContainer.prepend(addedMovie);
+
+        function button(movieVal) {
+            addedMovie.addEventListener("click", function (event) {
+                event.preventDefault()
+                fetchMovie(movieVal);
+                // console.log(movieVal)
+            })
+        }
+        button(movieVal);
+    }
+
+}
+searchList()
+
+happyBtn.addEventListener("click", function (event) {
     event.preventDefault();
     var genreID = happyBtn.getAttribute("data-genre")
     genreSearch(genreID);
 }
 );
 
-fantasyBtn.addEventListener("click", function(event){
+fantasyBtn.addEventListener("click", function (event) {
     event.preventDefault();
     var genreID = fantasyBtn.getAttribute("data-genre")
     genreSearch(genreID);
 }
 );
 
-adventureBtn.addEventListener("click", function(event){
+adventureBtn.addEventListener("click", function (event) {
     event.preventDefault();
     var genreID = adventureBtn.getAttribute("data-genre")
     genreSearch(genreID);
 }
 );
 
-horrorBtn.addEventListener("click", function(event){
+horrorBtn.addEventListener("click", function (event) {
     event.preventDefault();
     var genreID = horrorBtn.getAttribute("data-genre")
     genreSearch(genreID);
@@ -169,7 +222,7 @@ function genreSearch(genreID) {
             movieButtonContainer.classList.add("button-container")
 
             //for loop to append 5 first movies
-            
+
             var genreMoviesData = genreMovies.results
 
             for (var i = 0; i < genreMoviesData.length; i++) {
@@ -191,44 +244,44 @@ function genreSearch(genreID) {
                 }
                 buttonByID(movieID);
             }
-            if (pageNum > 1){
+            if (pageNum > 1) {
                 prevPageGenre(genreID);
             }
-        
+
             nextPageGenre(genreID);
         })
 }
 
 //next and previous buttons 
-function nextPageGenre (genreID){
+function nextPageGenre(genreID) {
     var nextBtn = document.createElement("button")
     nextBtn.textContent = "Next Page"
     nextBtn.classList = "button primary"
     nextBtn.setAttribute("class", "button")
-    nextBtn.style.background="#FACE7F"
-    nextBtn.style.color="black"
-    nextBtn.style.float="right"
+    nextBtn.style.background = "#FACE7F"
+    nextBtn.style.color = "black"
+    nextBtn.style.float = "right"
     mainpage.append(nextBtn)
-    nextBtn.addEventListener("click", function(){
-    pageNum = pageNum + 1 
-    console.log(pageNum)
-    genreSearch(genreID, pageNum)
+    nextBtn.addEventListener("click", function () {
+        pageNum = pageNum + 1
+        console.log(pageNum)
+        genreSearch(genreID, pageNum)
     })
-    
+
 }
-    
-function prevPageGenre (genreID){
-var prevBtn = document.createElement("button")
-prevBtn.textContent = "Previous Page"
-prevBtn.classList = "button primary"
-prevBtn.setAttribute("class", "button")
-prevBtn.style.background="#FACE7F"
-prevBtn.style.color="black"
-mainpage.append(prevBtn)
-prevBtn.addEventListener("click", function(){
-    pageNum = pageNum - 1
-    console.log(pageNum)
-    genreSearch(genreID, pageNum)
+
+function prevPageGenre(genreID) {
+    var prevBtn = document.createElement("button")
+    prevBtn.textContent = "Previous Page"
+    prevBtn.classList = "button primary"
+    prevBtn.setAttribute("class", "button")
+    prevBtn.style.background = "#FACE7F"
+    prevBtn.style.color = "black"
+    mainpage.append(prevBtn)
+    prevBtn.addEventListener("click", function () {
+        pageNum = pageNum - 1
+        console.log(pageNum)
+        genreSearch(genreID, pageNum)
     })
 }
 
@@ -242,7 +295,7 @@ function fetchMovieDetails(movieID) {
         .then(function (movieData) {
             console.log(movieData)
             mainpage.innerHTML = ""
-            
+
             // create title and tagline, append to main page
             var newMovieTitle = document.createElement("h1")
             mainpage.append(newMovieTitle)
@@ -267,7 +320,7 @@ function fetchMovieDetails(movieID) {
             //create poster el and append to poster container
             var movieImage = document.createElement("img")
             var posterPath = movieData.poster_path
-            console.log (posterPath)
+            console.log(posterPath)
             movieImage.setAttribute("src", "https://image.tmdb.org/t/p/w154/" + posterPath)
             posterContainer.append(movieImage)
 
@@ -275,26 +328,26 @@ function fetchMovieDetails(movieID) {
             var movieInfoContainer = document.createElement("div")
             row.append(movieInfoContainer)
             movieInfoContainer.classList.add("movie-info-container", "columns", "small-6", "large-4")
-            
-    
+
+
             //create info elements and append to info container
             var movieOverview = document.createElement("p")
             var movieInfo = document.createElement("h2")
             var movieRelease = document.createElement("p")
             var movieRunTime = document.createElement("p")
-            
-            movieInfoContainer.append(movieInfo)    
+
+            movieInfoContainer.append(movieInfo)
             movieInfoContainer.append(movieOverview)
             movieInfoContainer.append(movieRelease)
             movieInfoContainer.append(movieRunTime)
 
-            
+
             movieOverview.textContent = "Overview: " + movieData.overview
             movieInfo.textContent = "Movie Info"
             movieRelease.textContent = "Release Date: " + movieData.release_date
             movieRunTime.textContent = "Run Time: " + movieData.runtime + " mins"
-            
-           
+
+
 
             var movieTitle = newMovieTitle.textContent
             fetchNYTReview(movieTitle)
@@ -319,7 +372,7 @@ function fetchNYTReview(movieTitle) {
         .then(function (nytData) {
             console.log(nytData)
             var nytResults = nytData.results
-            
+
             //create row container
             var row = document.createElement("div")
             mainpage.append(row)
@@ -330,27 +383,22 @@ function fetchNYTReview(movieTitle) {
             row.append(nytReviewDiv)
             nytReviewDiv.classList.add("nyt-review-div", "columns", "small-6", "large-4")
 
-            if (nytResults === null){
-                var noReview = document.createElement("h2")
-                noReview.textContent = "Sorry, no NYT Review for " + movieTitle
-                row.append(nytReviewDiv)
-                nytReviewDiv.append(noReview)
-            } else if (nytDisplayTitle !== movieTitle){
+            if (nytResults === null) {
                 var noReview = document.createElement("h2")
                 noReview.textContent = "Sorry, no NYT Review for " + movieTitle
                 row.append(nytReviewDiv)
                 nytReviewDiv.append(noReview)
             } else {
-                for ( var i = 0; i < nytResults.length; i++){
+                for (var i = 0; i < nytResults.length; i++) {
                     var nytDisplayTitle = nytData.results[i].display_title
-                    console.log(nytDisplayTitle, movieTitle)
+                    console.log(nytDisplayTitle)
                     if (nytDisplayTitle === movieTitle){
 
                         //create review elements and append to review container
                         var nytReview = document.createElement("h2")
                         nytReview.textContent = "New York Times Review"
                         nytReviewDiv.append(nytReview)
-                        
+
                         var headline = document.createElement("h4")
                         headline.textContent = nytData.results[i].headline
                         nytReviewDiv.append(headline)
@@ -367,9 +415,9 @@ function fetchNYTReview(movieTitle) {
                         var criticPickData = nytData.results[i].critics_pick
                         nytReviewDiv.append(criticPick)
 
-                        if (criticPickData === 1){
+                        if (criticPickData === 1) {
                             criticPick.textContent = "This is a critic pick 👍"
-                        } else{
+                        } else {
                             criticPick.textContent = "This is not a critic pick 👎"
                         }
 
@@ -386,7 +434,7 @@ function fetchNYTReview(movieTitle) {
                     }
                 }
             }
-            
+
         })
 }
 
