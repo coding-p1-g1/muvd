@@ -11,11 +11,12 @@ var moodButtonsDiv = document.querySelector('.mood')
 var genreBtn = document.querySelector('.genre-button')
 
 // fetchMovie will get data from TMDb Api with what the user inputed
+var pageNum = 1
 
 function fetchMovie() {
     var keyword = titleInputEl.value.trim();
     var movie = keyword.replace(/\s+/g, '-');
-    var pageNum = 1
+    
     var requestUrl = "https://api.themoviedb.org/3/search/movie?api_key=" + apiKey + "&language=en-US&query=" + movie + "&page="+ pageNum + "&include_adult=false"
     
     fetch(requestUrl)
@@ -61,9 +62,47 @@ function fetchMovie() {
                     })
                 }
                 buttonByID(movieID);
+            } 
+            if (pageNum > 1){
+                prevPage();
             }
+        
+            nextPage();
         })
 }
+
+function nextPage (){
+var nextBtn = document.createElement("button")
+nextBtn.textContent = "Next Page"
+nextBtn.classList = "button primary"
+nextBtn.setAttribute("class", "button")
+nextBtn.style.background="#FACE7F"
+nextBtn.style.color="black"
+nextBtn.style.float="right"
+mainpage.append(nextBtn)
+nextBtn.addEventListener("click", function(){
+pageNum = pageNum + 1 
+console.log(pageNum)
+fetchMovie(pageNum)
+})
+
+}
+
+function prevPage (){
+var prevBtn = document.createElement("button")
+prevBtn.textContent = "Previous Page"
+prevBtn.classList = "button primary"
+prevBtn.setAttribute("class", "button")
+prevBtn.style.background="#FACE7F"
+prevBtn.style.color="black"
+mainpage.append(prevBtn)
+prevBtn.addEventListener("click", function(){
+pageNum = pageNum - 1
+console.log(pageNum)
+fetchMovie(pageNum)
+})
+}
+
 
 enterBtn.addEventListener("click", function(event){
     event.preventDefault();
@@ -316,3 +355,4 @@ function fetchNYTReview(movieTitle) {
             
         })
 }
+
