@@ -146,7 +146,7 @@ horrorBtn.addEventListener("click", function(event){
 //movie suggestions for mood buttons
 
 function genreSearch(genreID) {
-    var requestUrlGenre = "https://api.themoviedb.org/3/discover/movie?api_key=" + apiKey + "&language=en-US&sort_by=popularity.desc&with_genres=" + genreID
+    var requestUrlGenre = "https://api.themoviedb.org/3/discover/movie?api_key=" + apiKey + "&language=en-US&sort_by=popularity.desc&with_genres=" + genreID + "&page=" + pageNum
 
 
 
@@ -200,7 +200,45 @@ function genreSearch(genreID) {
                 }
                 buttonByID(movieID);
             }
+            if (pageNum > 1){
+                prevPageGenre(genreID);
+            }
+        
+            nextPageGenre(genreID);
         })
+}
+
+//next and previous buttons 
+function nextPageGenre (genreID){
+    var nextBtn = document.createElement("button")
+    nextBtn.textContent = "Next Page"
+    nextBtn.classList = "button primary"
+    nextBtn.setAttribute("class", "button")
+    nextBtn.style.background="#FACE7F"
+    nextBtn.style.color="black"
+    nextBtn.style.float="right"
+    mainpage.append(nextBtn)
+    nextBtn.addEventListener("click", function(){
+    pageNum = pageNum + 1 
+    console.log(pageNum)
+    genreSearch(genreID, pageNum)
+    })
+    
+}
+    
+function prevPageGenre (genreID){
+var prevBtn = document.createElement("button")
+prevBtn.textContent = "Previous Page"
+prevBtn.classList = "button primary"
+prevBtn.setAttribute("class", "button")
+prevBtn.style.background="#FACE7F"
+prevBtn.style.color="black"
+mainpage.append(prevBtn)
+prevBtn.addEventListener("click", function(){
+    pageNum = pageNum - 1
+    console.log(pageNum)
+    genreSearch(genreID, pageNum)
+    })
 }
 
 //movie details
